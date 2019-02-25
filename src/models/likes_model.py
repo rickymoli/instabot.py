@@ -9,7 +9,7 @@ class LikesModel:
             conexion = pymongo.MongoClient('localhost',27017)
             self.db = conexion.instabot
 
-        def save(self, user_id, tag):
+        def save(self, user_id, tag, media_id):
             collection = self.db.likes
-            like = {'user_id':user_id,'tag':tag,'created_at':datetime.now()}
+            like = {'user_id':user_id,'tag':tag,'media_id':media_id,'created_at':datetime.now()}
             return collection.insert_one(like).inserted_id
