@@ -32,6 +32,7 @@ import pickle
 
 # ricard code
 from .models.likes_model import LikesModel
+from .models.comments_model import CommentsModel
 
 python_version_test = f"If you are reading this error, you are not running Python 3.6 or greater. Check 'python --version' or 'python3 --version'."
 
@@ -152,6 +153,7 @@ class InstaBot:
 
     # ricard code
     likes_model = None
+    comments_model = None
     current_tag = ''
 
     def __init__(
@@ -358,6 +360,7 @@ class InstaBot:
 
         #ricard code
         self.likes_model = LikesModel()
+        self.comments_model = CommentsModel()
 
     def check_for_bot_update(self):
         self.write_log("Checking for updates...")
@@ -898,7 +901,7 @@ class InstaBot:
                                     )
                                     self.write_log(log_string)
                                     #ricard code
-                                    like_id_model = self.likes_model.save(self.media_by_tag[i]['node']['owner']['id'],self.current_tag)
+                                    like_id_model = self.likes_model.save(self.media_by_tag[i]['node']['owner']['id'], self.current_tag, self.media_by_tag[i]['node']['id'])
                                 elif like.status_code == 400:
                                     self.write_log(f"Not liked: {like.status_code} message {like.text}")
                                     insert_media(
@@ -1286,6 +1289,8 @@ class InstaBot:
                 self.comment(self.media_by_tag[0]["node"]["id"], comment_text)
                 is not False
             ):
+                #ricard code
+                comment_id_model = self.comments_model.save(self.media_by_tag[0]['node']['owner']['id'], comment_text, self.current_tag, self.media_by_tag[0]['node']['id'])
                 self.next_iteration["Comments"] = time.time() + self.add_time(
                     self.comments_delay
                 )
