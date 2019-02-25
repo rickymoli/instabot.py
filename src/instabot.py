@@ -30,6 +30,9 @@ import os
 import sys
 import pickle
 
+# ricard code
+from .models.likes_model import LikesModel
+
 python_version_test = f"If you are reading this error, you are not running Python 3.6 or greater. Check 'python --version' or 'python3 --version'."
 
 
@@ -146,6 +149,10 @@ class InstaBot:
         "Populate": 0,
     }
     prog_run = True
+
+    # ricard code
+    likes_model = None
+    current_tag = ''
 
     def __init__(
         self,
@@ -348,6 +355,9 @@ class InstaBot:
         signal.signal(signal.SIGTERM, self.cleanup)
         atexit.register(self.cleanup)
         self.instaload = instaloader.Instaloader()
+
+        #ricard code
+        self.likes_model = LikesModel()
 
     def check_for_bot_update(self):
         self.write_log("Checking for updates...")
@@ -681,6 +691,8 @@ class InstaBot:
                                 "edges"
                             ]
                         )
+                        # ricard code
+                        self.current_tag = tag
                     except:
                         self.media_by_tag = []
                         self.write_log("Except on get_media!")
@@ -885,6 +897,8 @@ class InstaBot:
                                         status="200",
                                     )
                                     self.write_log(log_string)
+                                    #ricard code
+                                    like_id_model = self.likes_model.save(self.media_by_tag[i]['node']['owner']['id'],self.current_tag)
                                 elif like.status_code == 400:
                                     self.write_log(f"Not liked: {like.status_code} message {like.text}")
                                     insert_media(
