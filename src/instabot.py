@@ -33,6 +33,7 @@ import pickle
 # ricard code
 from .models.likes_model import LikesModel
 from .models.comments_model import CommentsModel
+from .models.follows_model import FollowsModel
 
 python_version_test = f"If you are reading this error, you are not running Python 3.6 or greater. Check 'python --version' or 'python3 --version'."
 
@@ -155,6 +156,7 @@ class InstaBot:
     likes_model = None
     comments_model = None
     current_tag = ''
+    follows_model = None
 
     def __init__(
         self,
@@ -361,6 +363,7 @@ class InstaBot:
         #ricard code
         self.likes_model = LikesModel()
         self.comments_model = CommentsModel()
+        self.follows_model = FollowsModel()
 
     def check_for_bot_update(self):
         self.write_log("Checking for updates...")
@@ -993,6 +996,7 @@ class InstaBot:
                     log_string = f"Followed: {user_id} #{self.follow_counter}."
                     self.write_log(log_string)
                     insert_username(self, user_id=user_id, username=username)
+                    follow_id_model = self.follows_model.save(user_id, self.current_tag)
                 return follow
             except:
                 logging.exception("Except on follow!")
