@@ -125,3 +125,4 @@ The following video tutorials demo setting up and running the bot:
 ## Web analytics
 
 Flask is installed on /web folder as it's explained here: https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world 
+Use flask run command to launch it.
