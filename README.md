@@ -121,3 +121,7 @@ The following video tutorials demo setting up and running the bot:
 - [Telegram Group](https://t.me/joinchat/DYKH-0G_8hsDDoN_iE8ZlA)
 - [Facebook Group](https://www.facebook.com/groups/instabot/)
 - [IRC Channel on Freenode.net #instabot](http://webchat.freenode.net?channels=%23instabot)
+
+## Web analytics
+
+Flask is installed on /web folder as it's explained here: https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world 
