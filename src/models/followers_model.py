@@ -15,13 +15,11 @@ class FollowersModel:
 
         def save(self, user_id, user_name):
             collection = self.db.followers
-            result = collection.find({'user_id':str(user_id)});
+            result = collection.find({'user_id':str(user_id)})
             if result.count() == 0:
                 follower = {'user_id':str(user_id),'user_name':user_name,'active':True,'created_at':datetime.now()}
                 collection.insert_one(follower)
                 return 1
             else:
-                data['updated_at'] = datetime.now()
-                data['active'] = True
-                collection.update({'user_id':user_id},{'$set':data})
+                collection.update({'user_id':str(user_id)},{'$set':{'updated_at':datetime.now(),'active':True}})
                 return 0;
