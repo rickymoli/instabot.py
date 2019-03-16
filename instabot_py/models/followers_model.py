@@ -21,7 +21,6 @@ class FollowersModel:
                 collection.insert_one(follower)
                 return 1
             else:
-                data['updated_at'] = datetime.now()
-                data['active'] = True
+                data = {'updated_at':datetime.now(),'active':True}
                 collection.update({'user_id':user_id},{'$set':data})
                 return 0;

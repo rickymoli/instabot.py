@@ -1,7 +1,8 @@
 from InstagramAPI import InstagramAPI
 import sys
-sys.path.insert(0, '../models')
+sys.path.insert(0, '/home/pi/develop/instabot.py/instabot_py/models')
 from followers_model import FollowersModel
+import constantRaspbian
 
 def getTotalFollowers(api, user_id):
     followers = []
@@ -17,7 +18,7 @@ def getTotalFollowers(api, user_id):
     return followers
 
 followers_model = FollowersModel();
-InstagramAPI = InstagramAPI("", "")
+InstagramAPI = InstagramAPI(constantRaspbian.LOGIN, constantRaspbian.PASS)
 InstagramAPI.login()
 user_id = InstagramAPI.username_id
 followers = getTotalFollowers(InstagramAPI, user_id)
@@ -25,4 +26,4 @@ followers_model.setAllInactive()
 new = 0
 for item in followers:
     new += followers_model.save(item['pk'], item['username'])
-print 'New followers: ' + str(new)
+print ("New followers: {}".format(new))

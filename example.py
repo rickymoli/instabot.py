@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from instabot_py import InstaBot
+import constantRaspbian
 
 bot = InstaBot(
-    login="username",  # Enter username (lowercase). Do not enter email!
-    password="password",
+    login=constantRaspbian.LOGIN,  # Enter username (lowercase). Do not enter email!
+    password=constantRaspbian.PASS,
     like_per_day=1000,
     comments_per_day=0,
     tag_list=["follow4follow", "f4f", "cute", "l:212999109"],
