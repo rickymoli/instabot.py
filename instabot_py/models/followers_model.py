@@ -25,9 +25,9 @@ class FollowersModel:
                 collection.update({'user_id':str(user_id)},{'$set':data})
                 return 0;
 
-        def getNews(self):
+        def getNews(self, start, end):
             collection = self.db.followers
-            return collection.find({'active':True, 'updated_at': {'$exists':False}})
+            return collection.find({'created_at': {'$gte': start, '$lt': end}})
 
         def getLost(self, start, end):
             collection = self.db.followers

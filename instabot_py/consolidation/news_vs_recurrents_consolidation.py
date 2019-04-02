@@ -29,10 +29,10 @@ class NewsVsRecurrentsConsolidation:
         for liker in likers:
             follower = followers_model.getFollower(liker['pk'])
             if follower.count() > 0:
-                if 'updated_at' in follower[0]:
-                    is_new = False
-                else:
+                if follower[0]['created_at'] >= start and follower[0]['created_at'] < end:
                     is_new = True
+                else:
+                    is_new = False
                 tag_interaction = ''
                 if 'tag_interaction' in follower[0]:
                     tag_interaction = follower[0]['tag_interaction']

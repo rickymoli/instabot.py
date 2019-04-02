@@ -14,3 +14,11 @@ class LikersModel:
             {'$group':{'_id':'$users.pk','pk':{'$last':'$users.pk'},'media_id':{'$first':'$media_id'},'created_at':{'$first':'$users.created_at'}}}
         ])
         return list(likers)
+
+    def isLiker(self, pk, start, end):
+        collection = self.db.likers
+        items = collection.find({'users':{'$elemMatch':{'pk':int(pk),'created_at':{'$gte':start,'$lt':end}}}})
+        if items.count() > 0:
+            return True
+        else:
+            return False

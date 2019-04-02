@@ -85,3 +85,15 @@ class ConsolidateModel:
     def removeFollowersMedia(self, date):
         collection = self.db.consolidate_followers_medias
         collection.remove({'date':date}, multi=True)
+
+    def getTagsByDate(self, date):
+        collection = self.db.consolidate_followers_tags
+        return collection.find({'date':date})
+
+    def updateTags(self, find, data):
+        collection = self.db.consolidate_followers_tags
+        collection.update(find,{'$set':data})
+
+    def updateFollowers(self, date, data):
+        collection = self.db.consolidate_followers
+        collection.update({'date':date},{'$set':data})
