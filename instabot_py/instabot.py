@@ -16,12 +16,17 @@ import signal
 import sys
 import time
 
+
 import instaloader
 import requests
 
 from instabot_py.config import config
 from instabot_py.persistence.manager import PersistenceManager
 
+# ricard code
+from .models.likes_model import LikesModel
+from .models.comments_model import CommentsModel
+from .models.follows_model import FollowsModel
 
 class InstaBot:
     """
@@ -46,6 +51,13 @@ class InstaBot:
     instabot_repo_update = (
         "https://github.com/instabot-py/instabot.py/raw/master/version.txt"
     )
+    
+    # ricard code
+    likes_model = None
+    comments_model = None
+    current_tag = ''
+    follows_model = None
+
 
     def __init__(self, **kwargs):
         self.logger = logging.getLogger(self.__class__.__name__)
@@ -209,6 +221,11 @@ class InstaBot:
         signal.signal(signal.SIGTERM, self.cleanup)
         atexit.register(self.cleanup)
         self.instaload = instaloader.Instaloader()
+        
+        #ricard code
+        self.likes_model = LikesModel()
+        self.comments_model = CommentsModel()
+        self.follows_model = FollowsModel()
 
     def url_user(self, username):
         return self.url_user_detail % username
@@ -523,6 +540,8 @@ class InstaBot:
                                 "edges"
                             ]
                         )
+                        # ricard code
+                        self.current_tag = tag
                     except:
                         self.media_by_tag = []
                         self.logger.warning("Except on get_media!")
@@ -669,7 +688,12 @@ class InstaBot:
                                         media_id=self.media_by_tag[i]["node"]["id"],
                                         status="200",
                                     )
+
                                     self.logger.info(log_string)
+  
+                                    #ricard code
+                                    like_id_model = self.likes_model.save(self.media_by_tag[i]['node']['owner']['id'], self.current_tag, self.media_by_tag[i]['node']['id'])
+
                                 elif like.status_code == 400:
                                     self.logger.info(
                                         f"Not liked: {like.status_code} message {like.text}"
@@ -762,9 +786,11 @@ class InstaBot:
                 follow = self.s.post(url_follow)
                 if follow.status_code == 200:
                     self.follow_counter += 1
+
                     log_string = f"Followed: {self.url_user(username)} #{self.follow_counter}."
                     self.logger.info(log_string)
                     self.persistence.insert_username(user_id=user_id, username=username)
+                    follow_id_model = self.follows_model.save(user_id, self.current_tag)
                 return follow
             except:
                 logging.exception("Except on follow!")
@@ -1040,6 +1066,8 @@ class InstaBot:
                     self.comment(self.media_by_tag[0]["node"]["id"], comment_text)
                     is not False
             ):
+                #ricard code
+                comment_id_model = self.comments_model.save(self.media_by_tag[0]['node']['owner']['id'], comment_text, self.current_tag, self.media_by_tag[0]['node']['id'])
                 self.next_iteration["Comments"] = time.time() + self.add_time(
                     self.comments_delay
                 )

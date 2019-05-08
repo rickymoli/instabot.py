@@ -112,3 +112,6 @@ ENV/
 *.session
 DS/
 nohup.out
+
+constantRaspbian.py
+run_raspbian.py
